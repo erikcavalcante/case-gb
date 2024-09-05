@@ -37,7 +37,7 @@ steps:
       - 'status'
       - 'deployment/api-grupo-boticario'
     env:
-      - 'CLOUDSDK_COMPUTE_REGION=southamerica-west1'
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
 
 timeout: '1200s'  # Timeout para o processo de build (20 minutos)
