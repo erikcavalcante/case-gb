@@ -47,5 +47,5 @@ options:
   machineType: 'E2_MEDIUM'  # Tipo de máquina para o build
 
 substitutions:
-  _REGION: 'southamerica-west1'
+  _REGION: 'us-central1'
   _CLUSTER_NAME: 'gke-cluster-api-boticario'
