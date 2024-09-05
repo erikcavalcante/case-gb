@@ -1,0 +1,23 @@
+_format_version: "3.0"
+
+services:
+  - name: node-service
+    url: http://app:3000  # URL interna do serviço Node.js
+    routes:
+      - name: authenticate-route
+        methods:
+          - POST
+        paths:
+          - /api/v1/authenticate
+
+      - name: essences-route
+        methods:
+          - GET
+        paths:
+          - /api/v1/essences
+
+      - name: essence-by-id-route
+        methods:
+          - GET
+        paths:
+          - /api/v1/essences/(.*)

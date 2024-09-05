@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - JWT_SECRET_KEY=8ac97cb448991606bd31fc6f731061ffcd58a96d9fd877441e1ffc59491d68b0
+      - BOTICARIO_API_BASE_URL=https://api.dev.grupoboticario.com.br/v1/essences-challenge
+    volumes:
+      - .:/app
+    command: npm start

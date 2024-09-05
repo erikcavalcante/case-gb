@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/src/app.js", // Substitua pelo caminho do seu arquivo de entrada
+            "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe", // Caminho do executável do Node.js se necessário
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ]
+}

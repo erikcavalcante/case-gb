@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  cassandra:
+    image: cassandra:3.11
+    environment:
+      - CASSANDRA_CLUSTER_NAME=kong_cluster
+      - CASSANDRA_DC=kong_dc
+      - CASSANDRA_RACK=rack1
+    ports:
+      - "9042:9042"
+    networks:
+      - kong-net
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 10s
+      retries: 15
+      start_period: 60s
+
+  kong-migrations:
+    image: kong:3.0
+    command: kong migrations bootstrap
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    networks:
+      - kong-net
+
+  kong:
+    image: kong:3.0
+    environment:
+      KONG_DATABASE: cassandra
+      KONG_CASSANDRA_CONTACT_POINTS: cassandra
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+    depends_on:
+      kong-migrations:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    volumes:
+      - ./kong.yml:/kong/kong.yml
+    networks:
+      - kong-net
+
+  app:
+    build: .
+    environment:
+      - PORT=3000
+      - JWT_SECRET_KEY=8ac97cb448991606bd31fc6f731061ffcd58a96d9fd877441e1ffc59491d68b0
+      - BOTICARIO_API_BASE_URL=https://api.dev.grupoboticario.com.br/v1/essences-challenge
+    ports:
+      - "3000:3000"
+    networks:
+      - kong-net
+
+networks:
+  kong-net:
+    driver: bridge
