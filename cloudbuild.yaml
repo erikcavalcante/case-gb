@@ -27,8 +27,6 @@ steps:
       - 'kubernetes/deployment.yaml'
       - '-f'
       - 'kubernetes/service.yaml'
-      - '-f'
-      - 'kubernetes/ingress.yaml'
 
   # Etapa 6: Verificação de saúde dos pods
   - name: 'gcr.io/cloud-builders/kubectl'
