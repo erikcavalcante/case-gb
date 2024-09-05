@@ -17,7 +17,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials gke-cluster-api-boticario --zone southamerica-west1 --project $PROJECT_ID
+        gcloud container clusters get-credentials gke-cluster-api-boticario --zone us-central1 --project $PROJECT_ID
 
   # Etapa 5: Implantação no Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
