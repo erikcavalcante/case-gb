@@ -12,7 +12,7 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/api-grupo-boticario']
 
   # Etapa 4: Configurar o kubectl para usar o cluster GKE
-  - name: 'gcr.io/cloud-builders/kubectl'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -27,6 +27,11 @@ steps:
       - 'kubernetes/deployment.yaml'
       - '-f'
       - 'kubernetes/service.yaml'
+      - '-f'
+      - 'kubernetes/ingress.yaml'
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
 
   # Etapa 6: Verificação de saúde dos pods
   - name: 'gcr.io/cloud-builders/kubectl'
