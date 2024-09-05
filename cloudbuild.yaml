@@ -11,7 +11,15 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/api-grupo-boticario']
 
-  # Etapa 4: Implantação no Kubernetes
+  # Etapa 4: Configurar o kubectl para usar o cluster GKE
+  - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials gke-cluster-api-boticario --zone southamerica-west1 --project $PROJECT_ID
+
+  # Etapa 5: Implantação no Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'apply'
@@ -21,8 +29,23 @@ steps:
       - 'kubernetes/service.yaml'
       - '-f'
       - 'kubernetes/ingress.yaml'
+
+  # Etapa 6: Verificação de saúde dos pods
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'rollout'
+      - 'status'
+      - 'deployment/api-grupo-boticario'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=southamerica-west1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
 
 timeout: '1200s'  # Timeout para o processo de build (20 minutos)
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_MEDIUM'  # Tipo de máquina para o build
+
+substitutions:
+  _REGION: 'southamerica-west1'
+  _CLUSTER_NAME: 'gke-cluster-api-boticario'
