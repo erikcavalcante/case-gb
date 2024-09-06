@@ -58,7 +58,7 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 2
-          imagePullPolicy: Always  # Garante que sempre puxará a imagem mais recente do repositório
+          imagePullPolicy: IfNotPresent
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
