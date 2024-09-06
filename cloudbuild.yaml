@@ -11,18 +11,17 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/api-grupo-boticario:latest']
 
-  # Etapa 4: Verificar a implantação no Kubernetes
+  # Etapa 4: Obtenção de credenciais para o Kubernetes
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=$PROJECT_ID $CLOUDSDK_GET_CREDENTIALS_OPTS
+        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=$PROJECT_ID --quiet
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
-      - 'KUBECTL_VERSION=1.30'  # Adiciona a versão do kubectl
-      - 'CLOUDSDK_GET_CREDENTIALS_OPTS=--quiet'
+      - 'KUBECTL_VERSION=1.30'  # Definindo a versão do kubectl
 
   # Etapa 5: Implantação no Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
