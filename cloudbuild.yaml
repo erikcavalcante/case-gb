@@ -27,8 +27,6 @@ steps:
       - 'kubernetes/deployment.yaml'
       - '-f'
       - 'kubernetes/service.yaml'
-      - '-f'
-      - 'kubernetes/ingress.yaml'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
