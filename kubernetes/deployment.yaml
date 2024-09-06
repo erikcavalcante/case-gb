@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-grupo-boticario
+  name: api-grupo-boticario-deployment
   labels:
     app: api-grupo-boticario
 spec:
-  replicas: 2  # Usando duas réplicas para maior resiliência mesmo em ambiente de teste
+  replicas: 2  # Usando duas réplicas para maior resiliência
   selector:
     matchLabels:
       app: api-grupo-boticario
@@ -34,6 +34,14 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
+          startupProbe:  # Configuração da Startup Probe
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30  # Tempo de atraso inicial antes da primeira verificação (em segundos)
+            periodSeconds: 10        # Intervalo entre as verificações (em segundos)
+            timeoutSeconds: 5        # Tempo limite para cada verificação (em segundos)
+            failureThreshold: 10     # Número de falhas consecutivas permitidas antes de considerar a inicialização como falha
           livenessProbe:  # Verifica se o contêiner está "vivo" e funcionando
             httpGet:
               path: /
