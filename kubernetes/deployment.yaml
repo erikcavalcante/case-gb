@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: api-grupo-boticario
-          image: gcr.io/$PROJECT_ID/api-grupo-boticario:latest
+          image: gcr.io/api-grupo-boticario/api-grupo-boticario:latest
           ports:
             - containerPort: 3000
           env:
