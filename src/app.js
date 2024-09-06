@@ -6,7 +6,7 @@ const routes = require('./routes');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 4000; // Porta configurável através de variáveis de ambiente
+const port = 4000; // Porta configurável através de variáveis de ambiente
 
 app.use(bodyParser.json());
 app.use('/api/v1', routes); // Usa o arquivo de rotas para definir os endpoints
