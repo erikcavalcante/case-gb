@@ -17,10 +17,10 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=api-grupo-boticario
+        gcloud container clusters get-credentials autopilot-cluster-2 --region=us-central1 --project=api-grupo-boticario
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-2'
       - 'KUBECTL_VERSION=1.30'  # Definindo a versão do kubectl
 
   # Etapa 5: Implantação no Kubernetes
@@ -33,7 +33,7 @@ steps:
       - 'kubernetes/service.yaml'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-2'
 
   # Etapa 6: Verificação do status da implantação
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -43,7 +43,7 @@ steps:
       - 'deployment/api-grupo-boticario'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-2'
 
 timeout: '1200s'  # Timeout para o processo de build (20 minutos)
 options:
