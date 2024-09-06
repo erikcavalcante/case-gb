@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-grupo-boticario-deployment
+  name: api-grupo-boticario
   labels:
     app: api-grupo-boticario
 spec:
-  replicas: 2  # Usando duas réplicas para maior resiliência
+  replicas: 2  # Usando duas réplicas para resiliência
   selector:
     matchLabels:
       app: api-grupo-boticario
   strategy:
-    type: RollingUpdate  # Atualizações sem downtime
+    type: RollingUpdate  # Para atualizações sem downtime
     rollingUpdate:
-      maxSurge: 1         # Permite até 1 pod adicional durante a atualização
-      maxUnavailable: 1   # Permite até 1 pod indisponível durante a atualização
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -21,28 +21,28 @@ spec:
     spec:
       containers:
         - name: api-grupo-boticario
-          image: gcr.io/api-grupo-boticario/api-grupo-boticario:latest
+          image: gcr.io/$PROJECT_ID/api-grupo-boticario:latest
           ports:
             - containerPort: 3000
           env:
             - name: NODE_ENV
-              value: "test"  # Definido para ambiente de teste
+              value: "test"
           resources:
             requests:
-              memory: "128Mi"  # Limita a memória para evitar uso excessivo
-              cpu: "250m"      # Limita o uso de CPU
+              memory: "128Mi"
+              cpu: "250m"
             limits:
               memory: "256Mi"
               cpu: "500m"
-          startupProbe:  # Configuração da Startup Probe
+          startupProbe:
             httpGet:
               path: /
               port: 3000
-            initialDelaySeconds: 30  # Tempo de atraso inicial antes da primeira verificação (em segundos)
-            periodSeconds: 10        # Intervalo entre as verificações (em segundos)
-            timeoutSeconds: 5        # Tempo limite para cada verificação (em segundos)
-            failureThreshold: 10     # Número de falhas consecutivas permitidas antes de considerar a inicialização como falha
-          livenessProbe:  # Verifica se o contêiner está "vivo" e funcionando
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
             httpGet:
               path: /
               port: 3000
@@ -50,7 +50,7 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 3
-          readinessProbe:  # Verifica se o contêiner está "pronto" para receber tráfego
+          readinessProbe:
             httpGet:
               path: /
               port: 3000
@@ -58,14 +58,14 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: api-grupo-boticario-pdb
 spec:
-  minAvailable: 1  # Garante que pelo menos 1 réplica esteja sempre disponível
+  minAvailable: 1
   selector:
     matchLabels:
       app: api-grupo-boticario

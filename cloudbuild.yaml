@@ -11,42 +11,20 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/api-grupo-boticario']
 
-  # Etapa 4: Configurar o kubectl para usar o cluster GKE
-  - name: 'gcr.io/cloud-builders/gcloud'
+  # Etapa 4: Implantação no Kubernetes
+  - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials gke-cluster-api-boticario --zone us-central1 --project $PROJECT_ID
-
-  # Etapa 5: Implantação no Kubernetes
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'apply'
-      - '-f'
-      - 'kubernetes/deployment.yaml'
-      - '-f'
-      - 'kubernetes/service.yaml'
+        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=$PROJECT_ID
+        kubectl apply -f kubernetes/deployment.yaml
+        kubectl apply -f kubernetes/service.yaml
+        kubectl apply -f kubernetes/ingress.yaml
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
-
-  # Etapa 6: Verificação de saúde dos pods
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'rollout'
-      - 'status'
-      - 'deployment/api-grupo-boticario'
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-cluster-api-boticario'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
 
 timeout: '1200s'  # Timeout para o processo de build (20 minutos)
-
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: 'E2_MEDIUM'  # Tipo de máquina para o build
-
-substitutions:
-  _REGION: 'us-central1'
-  _CLUSTER_NAME: 'gke-cluster-api-boticario'
