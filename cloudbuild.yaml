@@ -17,7 +17,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=$PROJECT_ID
+        gcloud container clusters get-credentials autopilot-cluster-1 --region=us-central1 --project=api-grupo-boticario
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
