@@ -44,7 +44,7 @@ spec:
             failureThreshold: 10
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz  # Use o mesmo endpoint de saúde
               port: 4000
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -52,7 +52,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz  # Use o mesmo endpoint de saúde
               port: 4000
             initialDelaySeconds: 5
             periodSeconds: 5
