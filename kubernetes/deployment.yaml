@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-grupo-boticario-deployment
+  name: api-grupo-boticario
   labels:
     app: api-grupo-boticario
 spec:
