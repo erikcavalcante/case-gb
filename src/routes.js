@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Rotas de Autenticação
 router.post('/authenticate', authController.authenticate);
+router.post('/refresh', authController.refreshToken); 
 
 // Rotas de Essências (Boticário)
 router.get('/essences', authMiddleware.verifyTokenAndConvertToBasicAuth, essenceController.getEssences);

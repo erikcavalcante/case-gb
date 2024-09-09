@@ -27,3 +27,14 @@ exports.convertJWTtoBasicAuth = (token) => {
     return null;
   }
 };
+
+exports.verifyAndRefreshToken = (refreshToken) => {
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY);
+    const newToken = jwt.sign({ user: decoded.user }, JWT_SECRET_KEY, { expiresIn: '5m' });
+    const newRefreshToken = jwt.sign({ user: decoded.user }, JWT_SECRET_KEY, { expiresIn: '7d' });
+    return { token: newToken, refreshToken: newRefreshToken };
+  } catch (error) {
+    throw new Error('Invalid refresh token.');
+  }
+};
